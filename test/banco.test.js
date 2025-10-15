@@ -41,6 +41,11 @@ describe("Classe Banco - Método sacar", () => {
     expect(novoSaldo).toBe(30);
     expect(banco.transacoes).toContainEqual({ tipo: 'Saque', valor: 20 });
   });
+
+  test("Sacar valor igual ao saldo", async () => {
+    const novoSaldo = banco.sacar(50);
+    expect(novoSaldo).toBe(0);
+  });
 });
 
  describe("Classe Banco - Método transferir", () => {
@@ -59,6 +64,7 @@ describe("Classe Banco - Método sacar", () => {
     devedor.transferir(10, recebedor);
     expect(devedor.saldo).toBe(40);
     expect(recebedor.saldo).toBe(40);
+    expect(devedor.transacoes).toContainEqual({ tipo: 'Transferência', valor: 10, destino: recebedor.nome });
   })
 
  })
@@ -118,6 +124,10 @@ describe("Classe Banco - Método verificarLimiteDeSaque", () => {
   test('Deve lançar um erro ao verificar que o saldo está acima do limite', async () => {
     expect(() => banco.verificarLimiteDeSaque(600)).toThrow('Saque acima do limite permitido');
   });
+
+  test('Deve permitir saque igual ao limite', async () => {
+    expect(banco.verificarLimiteDeSaque(500)).toBe(true);
+  });
 });
 
 describe("Classe Banco - Método aplicarJuros", () => {
@@ -131,6 +141,7 @@ describe("Classe Banco - Método aplicarJuros", () => {
   test("Aplicar juros ao saldo", async () => {
     banco.aplicarJuros(10);
     expect(banco.saldo).toBe(550);
+    expect(banco.transacoes).toContainEqual({ tipo: 'Juros', valor: 50 });
   })
 })
 
@@ -161,6 +172,7 @@ describe("Classe Banco - Método obterTotalDepositado", () => {
   test("Obter o total depositado", async () => {
     banco.depositar(20);
     banco.depositar(35);
+    banco.sacar(10);
 
     totalDepositado = banco.obterTotalDepositado();
 

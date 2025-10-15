@@ -24,6 +24,11 @@ describe('Testes da classe Carro', () => {
         expect(carro.kilometragem).toBe(0);
     });
 
+    test('Não deve alterar a quilometragem se a distância for zero', () => {
+        carro.dirigir(0);
+        expect(carro.kilometragem).toBe(0);
+    });
+
     test('Deve retornar as informações corretas do carro', () => {
         const info = carro.obterInfo();
         expect(info).toBe('Toyota Corolla, Ano: 2020, Quilometragem: 0 km');
